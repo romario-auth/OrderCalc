@@ -20,4 +20,8 @@
     <Using Include="Xunit" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\OrderCalc.Domain\OrderCalc.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
