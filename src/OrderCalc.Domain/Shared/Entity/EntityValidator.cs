@@ -1,6 +1,6 @@
 using OrderCalc.Domain.Constants;
 
-namespace OrderCalc.Domain.Shared;
+namespace OrderCalc.Domain.Shared.Entity;
 
 public class EntityValidator
 {

@@ -1,4 +1,4 @@
-using OrderCalc.Domain.Shared;
+using OrderCalc.Domain.Shared.Entity;
 
 namespace OrderCalc.Domain.Entities;
 
@@ -19,5 +19,7 @@ public class OrderItem : EntityBase
         ProductId = productId;
         Quantity = quantity;
         Price = price;
+
+        SetCreated();
     }
 }
