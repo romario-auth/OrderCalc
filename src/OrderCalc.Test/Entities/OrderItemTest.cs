@@ -1,5 +1,6 @@
 using OrderCalc.Domain.Entities;
 using OrderCalc.Test.Shared.Fixtures.Entities;
+using OrderCalc.Domain.Constants;
 
 namespace OrderCalc.Test.Entities;
 
@@ -19,7 +20,7 @@ public class OrderItemTest
             OrderItemFixtures.New().Complete(productId, quantity, price).Builder());
 
         // Assert
-        Assert.Equal("Quantity must be greater than zero.", exception.Message);
+        Assert.Equal(string.Format(ErrorMessages.MustBeGreaterThanZero, nameof(quantity)), exception.Message);
     }
 
     [Fact]
@@ -35,7 +36,7 @@ public class OrderItemTest
             OrderItemFixtures.New().Complete(productId, quantity, price).Builder());
 
         // Assert
-        Assert.Equal("Quantity must be greater than zero.", exception.Message);
+        Assert.Equal(string.Format(ErrorMessages.MustBeGreaterThanZero, nameof(quantity)), exception.Message);
     }
 
     [Fact]
@@ -67,7 +68,7 @@ public class OrderItemTest
             OrderItemFixtures.New().Complete(productId, quantity, price).Builder());
 
         // Assert
-        Assert.Equal("Price must be greater than zero.", exception.Message);
+        Assert.Equal(string.Format(ErrorMessages.MustNotBeNegative, nameof(price)), exception.Message);
     }
 
     [Fact]
