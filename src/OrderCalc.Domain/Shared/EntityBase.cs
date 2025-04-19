@@ -1,4 +1,4 @@
-namespace OrderCalc.Domain.Common;
+namespace OrderCalc.Domain.Shared;
 
 public abstract class EntityBase
 {

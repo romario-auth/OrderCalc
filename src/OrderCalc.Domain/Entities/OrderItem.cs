@@ -1,4 +1,4 @@
-using OrderCalc.Domain.Common;
+using OrderCalc.Domain.Shared;
 
 namespace OrderCalc.Domain.Entities;
 
@@ -12,11 +12,9 @@ public class OrderItem : EntityBase
 
     public OrderItem(int productId, int quantity, decimal price)
     {
-        if (quantity <= 0)
-            throw new ArgumentException("Quantity must be greater than zero.");
+        EntityValidator.GreaterThanZero(quantity, nameof(quantity));
 
-        if (price < 0)
-            throw new ArgumentException("Price must be greater than zero.");
+        EntityValidator.NotNegative(price, nameof(price));
 
         ProductId = productId;
         Quantity = quantity;
