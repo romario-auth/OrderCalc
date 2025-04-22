@@ -28,7 +28,6 @@ public class OrderService : IOrderService
         if( orderExist != null)
             throw new ArgumentException(string.Format(ErrorMessages.DuplicateOrder));
 
-
         _orderRepository.Create(order);
         await _unitOfWork.Commit(cancellationToken);
         

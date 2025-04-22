@@ -1,8 +1,10 @@
+using Microsoft.Extensions.Options;
 using OrderCalc.Application.Interfaces;
 using OrderCalc.Application.Model.DTO;
 using OrderCalc.Domain.Entities;
 using OrderCalc.Domain.Enums;
 using OrderCalc.Domain.Interfaces.Services;
+using OrderCalc.Domain.Settings;
 using OrderCalc.Domain.Shared.Enums;
 
 namespace OrderCalc.Application.Service;
@@ -10,10 +12,12 @@ namespace OrderCalc.Application.Service;
 public class OrderServiceAplication : IOrderServiceAplication
 {
     private readonly IOrderService _orderService;
+    private readonly IOptions<TaxCalculationSettings> _taxSettings;
 
-    public OrderServiceAplication(IOrderService orderService)
+    public OrderServiceAplication(IOrderService orderService, IOptions<TaxCalculationSettings> taxSettings)
     {
         _orderService = orderService;
+        _taxSettings = taxSettings;
     }
 
     public async Task<OrderResponse> Get(int id, CancellationToken cancellationToken)

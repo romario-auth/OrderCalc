@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using OrderCalc.Application.Extensions;
+using OrderCalc.Domain.Settings;
 using OrderCalc.Infrastructure.Extensions;
 using Serilog;
 
@@ -18,6 +19,9 @@ builder.Host.UseSerilog();
 builder.Services.ConfigurePersistenceApp();
 builder.Services.InfrastructureServiceExtensions();
 builder.Services.AddControllers();
+
+builder.Services.Configure<TaxCalculationSettings>(
+    builder.Configuration.GetSection("TaxCalculation"));
 
 // API Versioning
 builder.Services.AddApiVersioning(options =>
