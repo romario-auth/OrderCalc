@@ -1,8 +1,18 @@
 using Microsoft.AspNetCore.Mvc;
 using OrderCalc.Application.Extensions;
 using OrderCalc.Infrastructure.Extensions;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Serilog
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .Enrich.FromLogContext()
+    .CreateLogger();
+
+// Ativando o Serilog como logger da aplicação
+builder.Host.UseSerilog();
 
 // Add services to the container.
 builder.Services.ConfigurePersistenceApp();
