@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using OrderCalc.Application.Extensions;
+using OrderCalc.Domain.Interfaces;
 using OrderCalc.Domain.Settings;
 using OrderCalc.Infrastructure.Extensions;
+using OrderCalc.Infrastructure.Services;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -30,6 +32,9 @@ builder.Services.AddApiVersioning(options =>
     options.DefaultApiVersion = new ApiVersion(1, 0);
     options.ReportApiVersions = true;
 });
+
+builder.Services.Configure<RabbitMQSettings>(builder.Configuration.GetSection("RabbitMQ"));
+builder.Services.AddSingleton<IPublisher, Publisher>();
 
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
