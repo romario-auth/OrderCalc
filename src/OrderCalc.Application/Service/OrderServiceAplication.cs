@@ -38,7 +38,7 @@ public class OrderServiceAplication : IOrderServiceAplication
 
     public async Task<OrderResponse> Create(CreateOrderRequest createOrderRequest, CancellationToken cancellationToken)
     {
-        Order order = Order.Create(createOrderRequest.PedidoId, createOrderRequest.ClienteId);
+        Order order = Order.Create(createOrderRequest.PedidoId, createOrderRequest.ClienteId, _taxSettings.Value.UseTaxReform);
         foreach (CreateOrderItemRequest item in createOrderRequest.Itens)
         {
             OrderItem orderItem = new OrderItem(item.ProdutoId, item.Quantidade, item.Valor);
