@@ -14,16 +14,16 @@ public class Order : EntityBase
 
     protected Order() { }
 
-    private Order(int customerId)
+    private Order(int id, int customerId)
     {
         CustomerId = customerId;
         Status = OrderStatus.Created;
-        SetCreated();
+        SetCreated(id);
     }
 
-    public static Order Create(int customerId)
+    public static Order Create(int id,int customerId)
     {
-        return new Order(customerId);
+        return new Order(id, customerId);
     }
 
     public void AddOrderItem(OrderItem orderItem)
