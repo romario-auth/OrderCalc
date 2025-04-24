@@ -33,6 +33,11 @@ public class Order : EntityBase
         TaxValue = taxValue;
     }
 
+    public void SetTaxStatus(OrderStatus status)
+    {
+        Status = status;
+    }
+
     public void AddOrderItem(OrderItem orderItem)
     {
         _items.Add(orderItem);

@@ -14,5 +14,8 @@ public enum OrderStatus
     Completed = 2,
 
     [Display(Name = "Cancelado")]
-    Canceled = 3
+    Canceled = 3,
+    
+    [Display(Name = "Calculado")]
+    Calculated = 4
 }

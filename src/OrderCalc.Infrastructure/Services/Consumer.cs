@@ -38,6 +38,7 @@ public class Consumer : IConsumer
         _channel = _connection.CreateModel();
 
         // Garante que a queue está criada
+        // TODO: abstrair a implementação para qualquer fila
         _channel.QueueDeclare(
             queue: "order.queue",
             durable: true,
@@ -47,6 +48,7 @@ public class Consumer : IConsumer
         );
 
         // Garante que a binding está feita
+        // TODO: abstrair a implementação para qualquer fila/routingKey
         _channel.QueueBind(
             queue: "order.queue",
             exchange: _settings.DefaultExchangeName,
@@ -70,13 +72,15 @@ public class Consumer : IConsumer
                 return;
             }
 
-
             _logger.LogInformation($"[RabbitMQ] Mensagem recebida: {json}");
+
+            await Task.Delay(5000);
 
             await _orderService.CalculateTaxAsync(orderCreated.OrderId, cancellationToken);
 
-            // Após processar, confirma o recebimento da mensagem
             _channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
+
+            // TODO: Enviar o pedido com imposto calculado para uma segunda fila, que será consumida pelo microserviço "Produto Externo B".
         };
 
         _channel.BasicQos(0, 1, false);

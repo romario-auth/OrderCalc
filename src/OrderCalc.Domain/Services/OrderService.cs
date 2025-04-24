@@ -42,22 +42,23 @@ public class OrderService : IOrderService
 
     public async Task<Order> CalculateTaxAsync(int id, CancellationToken cancellationToken)
     {
-        // 1. Recupera o pedido
         Order order = await _orderRepository.Get(id, cancellationToken);
         if (order == null)
             throw new ArgumentException($"Order {id} not found.");
 
-        // 2. Simula o cálculo do imposto (ex: 10% sobre o valor total)
-        var taxRate = 0.10m;
-        order.SetTaxValue(order.Items.Select(x => x.Price).FirstOrDefault() * taxRate);
+        // TODO: Implementar as classes e a lógica de cálculo referentes à Reforma Tributária
+        var taxRate = 0.00m;
+        if(order.UseTaxReform)
+            taxRate = 0.20m;
+        else
+            taxRate = 0.30m;
 
-        // 3. Atualiza a entidade
+        order.SetTaxValue(order.Items.Select(x => x.Price).Sum() * taxRate);
+        order.SetTaxStatus(OrderStatus.Calculated);
+
         _orderRepository.Update(order);
-
-        // 4. Salva as alterações
         await _unitOfWork.Commit(cancellationToken);
 
-        // 5. Retorna a entidade atualizada
         return order;
     }
 
