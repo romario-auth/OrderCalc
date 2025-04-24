@@ -50,7 +50,7 @@ public class OrderServiceAplication : IOrderServiceAplication
 
         await _orderService.Create(order, cancellationToken);
 
-         _publisher.Publish(new OrderCreatedMessage { OrderId = order.Id }, "order.created");
+        _publisher.Publish(new OrderCreatedMessage { OrderId = order.Id }, "order.created");
 
         List<OrderItemResponse> orderItemResponses = order.Items
         .Select(item => new OrderItemResponse(item.Id, item.Quantity, item.Price))

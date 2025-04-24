@@ -34,7 +34,31 @@ public class Publisher : IPublisher
         _connection = factory.CreateConnection();
         _channel = _connection.CreateModel();
 
-        _channel.ExchangeDeclare(_settings.DefaultExchangeName, _settings.DefaultExchangeType, durable: true);
+        // Declare Exchange
+        _channel.ExchangeDeclare(
+            exchange: _settings.DefaultExchangeName,
+            type: _settings.DefaultExchangeType,
+            durable: true,
+            autoDelete: false
+        );
+
+        // Declare queue:
+        // To do: abstract to any queue
+        _channel.QueueDeclare(
+            queue: "order.queue",
+            durable: true,
+            exclusive: false,
+            autoDelete: false,
+            arguments: null
+        );
+
+        // Binding to queue
+        // To do: abstract to any queue
+        _channel.QueueBind(
+            queue: "order.queue",
+            exchange: _settings.DefaultExchangeName,
+            routingKey: "order.created"
+        );
     }
 
     public void Publish<T>(T message, string routingKey)
