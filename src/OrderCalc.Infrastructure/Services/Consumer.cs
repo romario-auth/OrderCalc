@@ -1,7 +1,10 @@
 using System.Text;
+using System.Text.Json;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using OrderCalc.Domain.Interfaces;
+using OrderCalc.Domain.Interfaces.Services;
+using OrderCalc.Domain.Model.DTO;
 using OrderCalc.Domain.Settings;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -14,11 +17,13 @@ public class Consumer : IConsumer
     private readonly RabbitMQSettings _settings;
     private readonly IConnection _connection;
     private readonly IModel _channel;
+    private readonly IOrderService _orderService;
 
-    public Consumer(IOptions<RabbitMQSettings> options, ILogger<Consumer> logger)
+    public Consumer(IOptions<RabbitMQSettings> options, ILogger<Consumer> logger, IOrderService orderService)
     {
         _settings = options.Value;
         _logger = logger;
+        _orderService = orderService;
 
         var factory = new ConnectionFactory
         {
@@ -56,12 +61,19 @@ public class Consumer : IConsumer
         consumer.Received += async (model, ea) =>
         {
             var body = ea.Body.ToArray();
-            var message = Encoding.UTF8.GetString(body);
+            var json = Encoding.UTF8.GetString(body);
+            var orderCreated = JsonSerializer.Deserialize<OrderCreatedMessage>(json);
 
-            _logger.LogInformation($"[RabbitMQ] Mensagem recebida: {message}");
+            if (orderCreated == null)
+            {
+                _logger.LogError("Falha ao desserializar OrderCreatedMessage: {Json}", json);
+                return;
+            }
 
-            // Simula processamento por 5 segundos
-            await Task.Delay(5000);
+
+            _logger.LogInformation($"[RabbitMQ] Mensagem recebida: {json}");
+
+            await _orderService.CalculateTaxAsync(orderCreated.OrderId, cancellationToken);
 
             // Após processar, confirma o recebimento da mensagem
             _channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);

@@ -1,4 +1,4 @@
-using OrderCalc.Application.Model.DTO;
+using OrderCalc.Domain.Model.DTO;
 
 namespace OrderCalc.Application.Interfaces;
 

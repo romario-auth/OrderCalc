@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Options;
 using OrderCalc.Application.Interfaces;
-using OrderCalc.Application.Model.DTO;
+using OrderCalc.Domain.Model.DTO;
 using OrderCalc.Domain.Entities;
 using OrderCalc.Domain.Enums;
 using OrderCalc.Domain.Interfaces;

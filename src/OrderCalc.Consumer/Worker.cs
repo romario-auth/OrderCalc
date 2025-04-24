@@ -5,19 +5,21 @@ namespace OrderCalc.Consumer;
 public class Worker : BackgroundService
 {
     private readonly ILogger<Worker> _logger;
-    private readonly IConsumer _consumerService;
+    private readonly IServiceScopeFactory _scopeFactory;
 
-    public Worker(ILogger<Worker> logger, IConsumer consumerService)
+    public Worker(ILogger<Worker> logger, IServiceScopeFactory scopeFactory)
     {
         _logger = logger;
-        _consumerService = consumerService;
+        _scopeFactory = scopeFactory;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         _logger.LogInformation("Worker started at: {time}", DateTimeOffset.Now);
 
-        // Consome a fila de forma contínua
-        await _consumerService.StartConsumingAsync(stoppingToken);
+        using var scope = _scopeFactory.CreateScope();
+        var consumer = scope.ServiceProvider.GetRequiredService<IConsumer>();
+
+        await consumer.StartConsumingAsync(stoppingToken);
     }
 }

@@ -12,8 +12,11 @@ public static class ServiceExtensions
 {
     public static void InfrastructureServiceExtensions(this IServiceCollection services)
     {
+        // services.AddDbContext<AppDbContext>(options =>
+        //     options.UseInMemoryDatabase("OrdersDb"));
+
         services.AddDbContext<AppDbContext>(options =>
-            options.UseInMemoryDatabase("OrdersDb"));
+            options.UseSqlite("Data Source=ordercalc.db"));  
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IOrderRepository, OrderRepository>();

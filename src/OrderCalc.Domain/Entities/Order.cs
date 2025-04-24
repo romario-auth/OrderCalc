@@ -28,6 +28,11 @@ public class Order : EntityBase
         return new Order(id, customerId, UseTaxReform);
     }
 
+    public void SetTaxValue(decimal taxValue)
+    {
+        TaxValue = taxValue;
+    }
+
     public void AddOrderItem(OrderItem orderItem)
     {
         _items.Add(orderItem);

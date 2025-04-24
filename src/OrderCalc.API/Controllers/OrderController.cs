@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using OrderCalc.Application.Interfaces;
-using OrderCalc.Application.Model.DTO;
+using OrderCalc.Domain.Model.DTO;
 
 namespace OrderCalc.API.Controllers;
 
