@@ -6,11 +6,12 @@ public class OrderFixtures
 {
     private int _customerId = 1;
     private int _id = 1;
+    private bool useTaxReform = false;
 
     public static OrderFixtures New() => new OrderFixtures();
 
     public Order Builder()
     {
-        return Order.Create(_id, _customerId);
+        return Order.Create(_id, _customerId, useTaxReform);
     }
 }

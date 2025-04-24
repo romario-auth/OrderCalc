@@ -1,4 +1,4 @@
-namespace OrderCalc.Application.Model.DTO;
+namespace OrderCalc.Domain.Model.DTO;
 
 public class OrderResponse
 {

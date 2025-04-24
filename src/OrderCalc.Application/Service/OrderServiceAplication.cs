@@ -1,8 +1,11 @@
+using Microsoft.Extensions.Options;
 using OrderCalc.Application.Interfaces;
-using OrderCalc.Application.Model.DTO;
+using OrderCalc.Domain.Model.DTO;
 using OrderCalc.Domain.Entities;
 using OrderCalc.Domain.Enums;
+using OrderCalc.Domain.Interfaces;
 using OrderCalc.Domain.Interfaces.Services;
+using OrderCalc.Domain.Settings;
 using OrderCalc.Domain.Shared.Enums;
 
 namespace OrderCalc.Application.Service;
@@ -10,10 +13,14 @@ namespace OrderCalc.Application.Service;
 public class OrderServiceAplication : IOrderServiceAplication
 {
     private readonly IOrderService _orderService;
+    private readonly IOptions<TaxCalculationSettings> _taxSettings;
+    private readonly IPublisher _publisher;
 
-    public OrderServiceAplication(IOrderService orderService)
+    public OrderServiceAplication(IOrderService orderService, IOptions<TaxCalculationSettings> taxSettings, IPublisher publisher)
     {
         _orderService = orderService;
+        _taxSettings = taxSettings;
+        _publisher = publisher;
     }
 
     public async Task<OrderResponse> Get(int id, CancellationToken cancellationToken)
@@ -34,7 +41,7 @@ public class OrderServiceAplication : IOrderServiceAplication
 
     public async Task<OrderResponse> Create(CreateOrderRequest createOrderRequest, CancellationToken cancellationToken)
     {
-        Order order = Order.Create(createOrderRequest.PedidoId, createOrderRequest.ClienteId);
+        Order order = Order.Create(createOrderRequest.PedidoId, createOrderRequest.ClienteId, _taxSettings.Value.UseTaxReform);
         foreach (CreateOrderItemRequest item in createOrderRequest.Itens)
         {
             OrderItem orderItem = new OrderItem(item.ProdutoId, item.Quantidade, item.Valor);
@@ -42,6 +49,8 @@ public class OrderServiceAplication : IOrderServiceAplication
         }
 
         await _orderService.Create(order, cancellationToken);
+
+        _publisher.Publish(new OrderCreatedMessage { OrderId = order.Id }, "order.created");
 
         List<OrderItemResponse> orderItemResponses = order.Items
         .Select(item => new OrderItemResponse(item.Id, item.Quantity, item.Price))

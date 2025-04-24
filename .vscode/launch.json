@@ -1,0 +1,17 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Debug OrderCalc.Consumer",
+        "type": "coreclr",
+        "request": "launch",
+        "preLaunchTask": "build",
+        "program": "${workspaceFolder}/src/OrderCalc.Consumer/bin/Debug/net8.0/OrderCalc.Consumer.dll",
+        "args": [],
+        "cwd": "${workspaceFolder}/src/OrderCalc.Consumer",
+        "stopAtEntry": false,
+        "console": "internalConsole"
+      }
+    ]
+  }
+  
