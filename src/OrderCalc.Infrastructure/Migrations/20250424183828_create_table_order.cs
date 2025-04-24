@@ -30,7 +30,7 @@ namespace OrderCalc.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "User",
+                name: "OrderItem",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
@@ -43,9 +43,9 @@ namespace OrderCalc.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_User", x => x.Id);
+                    table.PrimaryKey("PK_OrderItem", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_User_Order_OrderId",
+                        name: "FK_OrderItem_Order_OrderId",
                         column: x => x.OrderId,
                         principalTable: "Order",
                         principalColumn: "Id",
@@ -53,8 +53,8 @@ namespace OrderCalc.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_User_OrderId",
-                table: "User",
+                name: "IX_OrderItem_OrderId",
+                table: "OrderItem",
                 column: "OrderId");
         }
 
@@ -62,7 +62,7 @@ namespace OrderCalc.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "User");
+                name: "OrderItem");
 
             migrationBuilder.DropTable(
                 name: "Order");

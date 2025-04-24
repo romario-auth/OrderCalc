@@ -11,7 +11,7 @@ using OrderCalc.Infrastructure.Context;
 namespace OrderCalc.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250424145328_create_table_order")]
+    [Migration("20250424183828_create_table_order")]
     partial class create_table_order
     {
         /// <inheritdoc />
@@ -74,7 +74,7 @@ namespace OrderCalc.Infrastructure.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("User");
+                    b.ToTable("OrderItem");
                 });
 
             modelBuilder.Entity("OrderCalc.Domain.Entities.OrderItem", b =>

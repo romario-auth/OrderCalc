@@ -6,7 +6,7 @@ namespace OrderCalc.Infrastructure.Context;
 public class AppDbContext : DbContext
 {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
-    public DbSet<OrderItem> User { get; set; }
+    public DbSet<OrderItem> OrderItem { get; set; }
     public DbSet<Order> Order { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

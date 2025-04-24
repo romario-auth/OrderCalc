@@ -71,7 +71,7 @@ namespace OrderCalc.Infrastructure.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("User");
+                    b.ToTable("OrderItem");
                 });
 
             modelBuilder.Entity("OrderCalc.Domain.Entities.OrderItem", b =>
