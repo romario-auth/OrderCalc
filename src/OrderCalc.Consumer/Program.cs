@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using OrderCalc.Consumer;
+using OrderCalc.Domain.Factory;
 using OrderCalc.Domain.Interfaces;
+using OrderCalc.Domain.Interfaces.Factory;
 using OrderCalc.Domain.Interfaces.Repositories;
 using OrderCalc.Domain.Interfaces.Services;
 using OrderCalc.Domain.Services;
@@ -27,6 +29,8 @@ IHost host = Host.CreateDefaultBuilder(args)
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IOrderRepository, OrderRepository>();
         services.AddScoped<IOrderService, OrderService>();
+        services.AddScoped<ITaxCalculatorFactory, TaxCalculatorFactory>();
+
     })
     .UseSerilog()
     .Build();

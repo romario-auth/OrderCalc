@@ -2,6 +2,8 @@ using OrderCalc.Domain.Constants;
 using OrderCalc.Domain.Entities;
 using OrderCalc.Domain.Enums;
 using OrderCalc.Domain.Interfaces;
+using OrderCalc.Domain.Interfaces.Entities;
+using OrderCalc.Domain.Interfaces.Factory;
 using OrderCalc.Domain.Interfaces.Repositories;
 using OrderCalc.Domain.Interfaces.Services;
 
@@ -10,11 +12,13 @@ public class OrderService : IOrderService
 {
     private readonly IOrderRepository _orderRepository;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly ITaxCalculatorFactory _taxCalculatorFactory;
 
-    public OrderService(IOrderRepository orderRepository, IUnitOfWork unitOfWork)
+    public OrderService(IOrderRepository orderRepository, IUnitOfWork unitOfWork, ITaxCalculatorFactory taxCalculatorFactory)
     {
         _orderRepository = orderRepository;
         _unitOfWork = unitOfWork;
+        _taxCalculatorFactory = taxCalculatorFactory;
     }
 
     public async Task<Order> Get(int id, CancellationToken cancellationToken)
@@ -46,14 +50,11 @@ public class OrderService : IOrderService
         if (order == null)
             throw new ArgumentException($"Order {id} not found.");
 
-        // TODO: Implementar as classes e a lógica de cálculo referentes à Reforma Tributária
-        var taxRate = 0.00m;
-        if(order.UseTaxReform)
-            taxRate = 0.20m;
-        else
-            taxRate = 0.30m;
+        var calculator = _taxCalculatorFactory.Create(order.UseTaxReform);
+        var total = order.Items.Sum(x => x.Price * x.Quantity);
+        var taxValue = calculator.Calculate(total);
 
-        order.SetTaxValue(order.Items.Select(x => x.Price).Sum() * taxRate);
+        order.SetTaxValue(taxValue);
         order.SetTaxStatus(OrderStatus.Calculated);
 
         _orderRepository.Update(order);
